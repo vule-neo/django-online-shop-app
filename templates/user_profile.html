@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% if users_posts %}
+<div class="alert alert-primary" role="alert">
+	<h3>Objave korisnika: {{ users_posts.first.user }}</h3>
+</div>
+<br>
+<div class="row">
+{% for post in users_posts %}
+	<div class="col-4">
+	<div class="card">
+			    <a href="{% url 'pik:post-view' post.id %}"><img src="{{ post.img.url }}" class="card-img-top"></a>
+			    	<div class="card-body">
+			    		<h5 class="card-title">{{post.title}}</h5>
+			    		<p class="card-text">{{post.description}}</p>
+			    		{% if post.price_int %}
+				    		<p><b>Cijena: {{post.price_int}} KM</b></p>
+				    	{% else %}
+				    		<p><b>Cijena: {{post.price}}</b></p>
+				    	{% endif %}
+			    	</div>
+			    	<div class="card-footer">
+			      		<small class="text-muted">{{post.post_date|timesince}} ago</small>
+			    	</div>
+			  </div>
+			</div>
+{% endfor %}
+</div>
+{% else %}
+<div class="alert alert-danger" role="alert">
+	<h3>Ovaj korisnik nema objava</h3>
+</div>
+{% endif %}
+
+{% endblock %}

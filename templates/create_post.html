@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+{% load crispy_forms_tags %}
+
+<div class="form-row">
+	<form method="POST" class="uniForm" enctype="multipart/form-data">
+	{% csrf_token %}
+	{{form|crispy}}
+	<button type="submit" class="btn btn-dark">Objavi</button>
+	</form>
+</div>
+{% endblock %}

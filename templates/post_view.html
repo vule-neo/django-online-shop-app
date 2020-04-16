@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="alert alert-primary" role="alert">
+	<h2>{{post.title}}</h2>
+</div>
+<br>
+<div class="row">
+	<div class="col-md-7">
+		<a href="{% url 'pik:post-questions' post.id %}" class="btn btn-info btn-lg btn-block">Postavi pitanje</a>
+		<ul class="list-group mt-3">
+		  <li class="list-group-item"><b>Naslov proizvoda:</b> {{post.title}}</li>
+		  <li class="list-group-item"><b>Kategorija:</b> <a href="{% url 'pik:category-view' post.category%}">{{post.category}}</a></li>
+		  {% if post.price_int %}
+		  	<li class="list-group-item"><b>Cijena:</b> {{post.price_int}} KM</li>
+		  {% else %}
+		  	<li class="list-group-item"><b>Cijena:</b> {{post.price}} KM</li>
+		  {% endif %}
+		  <li class="list-group-item"><b>Kratak opis:</b> <p>{{post.description}}</p></li>
+		{% if post.replacement %}
+		  <li class="list-group-item"><b>Zamjena:</b> <p>Korisnik želi zamjenu za ovaj artikal</p></li>
+		  {% else %}
+		   <li class="list-group-item"><b>Zamjena:</b> <p>Korisnik <b>ne</b> želi zamjenu za ovaj artikal</p></li>
+		{% endif %}
+		</ul>
+	</div>
+	<div class="col-md-5">
+		{% if user.is_authenticated %}
+			<center><h4 class="text-primary mb-4">Objavio: <a href="{% url 'pik:user-profile' post.user.id %}">{{post.user.username}}</a></h4></center>
+		{% endif %}
+		<center>
+		<div class="card" style="width: 20rem;">
+  			<img src="{{post.img.url}}" style="cursor: pointer;" class="card-img-top" data-toggle="modal" data-target=".bd-example-modal-lg">
+  			<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  				<div class="modal-dialog modal-lg">
+    				<div class="modal-content">
+      				<img src="{{post.img.url}}">
+   				</div>
+  			</div>
+		</div>
+		</div>
+		</center>
+		{% if request.user == post.user %}
+		<form method="POST" class="mt-3">
+			{% csrf_token %}
+			<a href="{% url 'pik:delete-post' post.id %}" class="btn btn-danger btn-lg btn-block">Delete</a>
+			<a href="{% url 'pik:update-post' post.id %}" class="btn btn-info btn-lg btn-block">Update</a>
+		</form>
+		{% endif %}
+	</div>
+</div>
+
+<br><br><br>
+<div class="alert alert-dark" role="alert">
+	<h4 class="mt-3 mb-3">Objave koje bi vas mogle interesovati:</h4>
+</div>
+<br>
+<div class="row mt-4">
+	{% for pst in all_posts %}
+	{% if post.id != pst.id %}
+	{% if pst.category == post.category %}
+	<div class="col-md-4">
+		<div class="card">
+			    <a href="{% url 'pik:post-view' pst.id %}"><img src="{{ pst.img.url }}" class="card-img-top"></a>
+			    	<div class="card-body">
+			    		<h5 class="card-title">{{pst.title}}</h5>
+			    		<p class="card-text">{{pst.description}}</p>
+			    		<p><b>Cijena: {{pst.price}} KM</b></p>
+			    	</div>
+			    	<div class="card-footer">
+			      		<small class="text-muted">{{pst.post_date|timesince}} ago</small>
+			    	</div>
+		</div>
+	</div>
+	{% endif %}
+	{% endif %}
+	{% endfor %}
+</div>
+
+
+{% endblock %}

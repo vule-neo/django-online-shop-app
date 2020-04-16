@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="alert alert-dark" role="alert">
+	<center><h2>Dobrodošli na pik klon!</h2></center>
+</div>
+<br>
+
+<div class="row">
+	<div class="col-md-3">
+		<ul class="list-group mb-5">
+			{% for cat in categories %}
+			 <li class="list-group-item"><p><a href="{% url 'pik:category-view' cat %}" class="text-dark">{{ cat }}</a></p></li>
+			{% endfor %}
+		</ul>
+	</div>
+
+	<div class="col-md-9">
+	<div class="container">
+
+		<center><h3>Istaknute objave:</h3></center>
+		<br>
+		<div class="row">
+	{% for post in posts %}
+		<div class="col-md-4 mb-2">
+			<div class="card">
+			    <a href="{% url 'pik:post-view' post.id %}"><img src="{{ post.img.url }}" class="card-img-top"></a>
+			    	<div class="card-body">
+			    		<h5 class="card-title">{{post.title}}</h5>
+			    		<p class="card-text">{{post.description}}</p>
+			    		{% if post.price_int %}
+				    		<p><b>Cijena: {{post.price_int}} KM</b></p>
+				    	{% elif post.price == "Po dogovoru" %}
+				    		<p><b>Cijena: {{post.price}}</b></p>
+				    	{% else %}
+				    		<p><b>Cijena: {{post.price}}KM</b></p>
+				    	{% endif %}
+			    	</div>
+			    	<div class="card-footer">
+			      		<small class="text-muted">{{post.post_date|timesince}} ago</small>
+			    	</div>
+			  </div>
+		</div>
+	{% endfor %}
+		</div>
+	</div>
+	</div>
+</div>
+
+<center>
+	<nav aria-label="Page navigation example">
+	  <ul class="pagination justify-content-center pagination-lg">
+	  	{% if posts.has_previous %}
+	    <li class="page-item">
+	      <a class="page-link text-dark" href="?page={{ posts.previous_page_number }}" aria-label="Previous">
+	        <span aria-hidden="true">&laquo;</span>
+	      </a>
+	    </li>
+	    {% endif %}
+	    {% if page %}
+	    	<li class="page-item"><a class="page-link text-dark" href="#">{{page}}</a></li>
+	    {% else %}
+	    	<li class="page-item"><a class="page-link text-dark" href="#">1</a></li>
+	    {% endif %}
+	    {% if posts.has_next %}
+	    <li class="page-item">
+	      <a class="page-link text-dark" href="?page={{ posts.next_page_number }}" aria-label="Next">
+	        <span aria-hidden="true">&raquo;</span>
+	      </a>
+	    </li>
+	    {% endif %}
+	  </ul>
+	</nav>
+</center>
+
+{% endblock %}
+

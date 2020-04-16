@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+
+<form method="POST">
+	{% csrf_token %}
+	<button type="submit" class="btn btn-primary">Obriši {{post.title}}</button>
+</form>
+
+{% endblock %}

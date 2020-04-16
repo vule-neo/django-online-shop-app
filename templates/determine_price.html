@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+{% load crispy_forms_tags %}
+
+<h1>Odredite cijenu vašeg proizvoda</h1>
+	<form method="POST" class="mt-5 mb-5">
+		{% csrf_token %}
+		<b>Unesite cijenu:</b> <input type="text" name="cijena">
+		<button type="submit" class="btn btn-primary">Potvrdi</button>
+	</form>
+
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% if category_posts %}
+	<div class="alert alert-primary" role="alert">
+		<h2>Objave za kategoriju: {{category_posts.first.category}}</h2>
+	</div>
+	<div class="alert alert-warning" style="word-spacing: 20px;" role="alert">
+		<center>
+		{% for category in categories %}
+			<b><a class="text-danger" href="{% url 'pik:category-view' category %}">{{category}}</a></b>
+		{% endfor %}
+		</center>
+	</div>
+	<br>
+	<div class="row">
+	{% for post in category_posts %}
+			<div class="col-md-4 mb-2">
+				<div class="card">
+				    <a href="{% url 'pik:post-view' post.id %}"><img src="{{ post.img.url }}" class="card-img-top"></a>
+				    	<div class="card-body">
+				    		<h5 class="card-title">{{post.title}}</h5>
+				    		<p class="card-text">{{post.description}}</p>
+				    		{% if post.price_int %}
+				    		<p><b>Cijena: {{post.price_int}} KM</b></p>
+				    		{% elif post.price == "Po dogovoru" %}
+				    		<p><b>Cijena: {{post.price}}</b></p>
+				    		{% else %}
+				    		<p><b>Cijena: {{post.price}}KM</b></p>
+				    		{% endif %}
+				    	</div>
+				    	<div class="card-footer">
+				      		<small class="text-muted">{{post.post_date|timesince}} ago</small>
+				    	</div>
+				  </div>
+			</div>
+		{% endfor %}
+	</div>
+{% else %}
+<div class="alert alert-warning" style="word-spacing: 20px;" role="alert">
+		<center>
+		{% for category in categories %}
+			<b><a class="text-danger" href="{% url 'pik:category-view' category %}">{{category}}</a></b>
+		{% endfor %}
+		</center>
+	</div>
+<div class="alert alert-danger mt-5" role="alert">
+	<center><h1>Ova kategorija nema objava.</h1></center>
+</div>
+{% endif %}
+{% endblock %}
